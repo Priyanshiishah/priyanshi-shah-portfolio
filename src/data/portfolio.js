@@ -1,3 +1,5 @@
+const assetPath = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 export const portfolio = {
   name: "Priyanshi Shah",
   initials: "PS",
@@ -16,7 +18,8 @@ export const portfolio = {
       href: "https://github.com/priyanshiishah",
     },
   ],
-  resumePath: "/Priyanshi_Shah_Resume.pdf",
+  profileImage: assetPath("priyanshi-shah.jpg"),
+  resumePath: assetPath("Priyanshi_Shah_Resume.pdf"),
   about: [
     "Hi, I’m Priyanshi, a software and data platform engineer who enjoys turning complex data and infrastructure problems into reliable software. I work across backend development, cloud systems, data engineering, and applied AI.",
     "Throughout my career, I’ve built distributed services, automated large-scale data pipelines, developed real-time analytics workflows, and integrated machine learning into production systems. My experience spans e-commerce, healthcare, crisis response, education, and enterprise applications.",
@@ -93,7 +96,7 @@ export const portfolio = {
   experience: [
     {
       company: "Nestlé USA",
-      logo: "/logos/nestle.png",
+      logo: assetPath("logos/nestle.png"),
       role: "Software Engineer, Amazon Account",
       period: "Jun 2025 — Present",
       summary:
@@ -102,7 +105,7 @@ export const portfolio = {
     },
     {
       company: "Magnamus Inc.",
-      logo: "/logos/magnamus.png",
+      logo: assetPath("logos/magnamus.png"),
       role: "Senior Data & Platform Engineer",
       period: "Jul 2024 — Jun 2025",
       summary:
@@ -111,7 +114,7 @@ export const portfolio = {
     },
     {
       company: "MemorialCare LBMC",
-      logo: "/logos/memorialcare.png",
+      logo: assetPath("logos/memorialcare.png"),
       role: "Data Engineer",
       period: "Apr 2024 — Jun 2024",
       summary:
@@ -120,7 +123,7 @@ export const portfolio = {
     },
     {
       company: "Match4Action — CrowdDoing",
-      logo: "/logos/crowddoing.png",
+      logo: assetPath("logos/crowddoing.png"),
       role: "Software Engineer",
       period: "Jun 2023 — Mar 2024",
       summary:
@@ -129,7 +132,7 @@ export const portfolio = {
     },
     {
       company: "California State University Long Beach",
-      logo: "/logos/csulb.svg",
+      logo: assetPath("logos/csulb.svg"),
       role: "Software Engineer",
       period: "May 2022 — May 2023",
       summary:
@@ -138,7 +141,7 @@ export const portfolio = {
     },
     {
       company: "Dhyey Consulting Services",
-      logo: "/logos/dhyey.png",
+      logo: assetPath("logos/dhyey.png"),
       role: "Junior Application Developer",
       period: "Jun 2020 — Aug 2021",
       summary:
@@ -149,14 +152,14 @@ export const portfolio = {
   education: [
     {
       school: "California State University Long Beach",
-      logo: "/logos/csulb.svg",
+      logo: assetPath("logos/csulb.svg"),
       degree: "Master of Science in Computer Science",
       period: "2021 — 2023",
       location: "Long Beach, California",
     },
     {
       school: "Gujarat Technological University",
-      logo: "/logos/gtu.png",
+      logo: assetPath("logos/gtu.png"),
       logoClassName: "scale-125",
       degree: "Bachelor of Technology in Computer Engineering",
       period: "2016 — 2020",

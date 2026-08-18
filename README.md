@@ -18,7 +18,13 @@ npm run build
 
 ## Hosting
 
-The site is configured for Cloudflare Pages:
+The site deploys automatically to GitHub Pages on every push to `main`.
+
+- Workflow: `.github/workflows/deploy-pages.yml`
+- Production URL: `https://priyanshiishah.github.io/priyanshi-shah-portfolio/`
+- Dependency and GitHub Actions updates: `.github/dependabot.yml`
+
+The project is also ready for Cloudflare Pages when a Cloudflare account is connected:
 
 - Build command: `npm run build`
 - Build output directory: `dist`

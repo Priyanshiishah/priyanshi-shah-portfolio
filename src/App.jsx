@@ -381,7 +381,7 @@ function App() {
               />
               <img
                 className="relative h-52 w-52 border-4 border-white object-cover shadow-xl"
-                src="/priyanshi-shah.jpg"
+                src={portfolio.profileImage}
                 alt="Priyanshi Shah"
                 width="200"
                 height="200"
