@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: /priyanshi-shah-portfolio/
+          BASE_PATH: /
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
