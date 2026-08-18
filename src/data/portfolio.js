@@ -71,7 +71,6 @@ export const portfolio = {
   ],
   projects: [
     {
-      index: "01",
       title: "Feature Prioritization Platform",
       description:
         "An ML-powered decision platform that analyzed more than 1.2 million user events to score feature impact, align product teams, and accelerate roadmap decisions.",
@@ -82,7 +81,6 @@ export const portfolio = {
       stack: ["Python", "Power BI", "Azure Synapse", "A/B Testing"],
     },
     {
-      index: "02",
       title: "Service Discovery System",
       description:
         "A resilient, multi-zone service discovery platform on AWS EKS, designed for faster detection, repeatable infrastructure, and dependable backend communication.",
@@ -93,7 +91,6 @@ export const portfolio = {
       stack: ["AWS EKS", "Consul", "Terraform", "Helm", "Ansible"],
     },
     {
-      index: "03",
       title: "Vitalis BMI Calculator",
       description:
         "A responsive, edge-hosted health screening application that normalizes metric and imperial measurements, computes BMI and healthy-weight intervals, and maps results to standardized health-risk guidance entirely in the browser.",

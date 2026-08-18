@@ -216,12 +216,9 @@ function ProjectsPanel() {
       <div className="divide-y divide-black/10 px-6 sm:px-9">
         {portfolio.projects.map((project) => (
           <article
-            className="grid gap-5 py-9 sm:grid-cols-[44px_1fr]"
+            className="py-9"
             key={project.title}
           >
-            <span className="font-serif text-xl italic text-black/30">
-              {project.index}
-            </span>
             <div>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <h3 className="text-xl font-bold">{project.title}</h3>
