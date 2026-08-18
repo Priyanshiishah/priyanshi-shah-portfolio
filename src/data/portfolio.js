@@ -89,6 +89,9 @@ export const portfolio = {
         "40% faster provisioning",
       ],
       stack: ["AWS EKS", "Consul", "Terraform", "Helm", "Ansible"],
+      image: assetPath("service-discovery-architecture.png"),
+      imageAlt:
+        "AWS service discovery architecture with Terraform and Ansible provisioning, Consul, a load balancer, private backend services, and S3 storage",
     },
     {
       title: "Vitalis BMI Calculator",

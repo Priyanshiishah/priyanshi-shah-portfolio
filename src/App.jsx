@@ -233,6 +233,17 @@ function ProjectsPanel() {
                   </a>
                 )}
               </div>
+              {project.image && (
+                <figure className="mt-5 overflow-hidden border border-black/10 bg-white">
+                  <img
+                    className="h-auto w-full"
+                    src={project.image}
+                    alt={project.imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              )}
               <p className="mt-4 text-base leading-7 text-black/55">
                 {project.description}
               </p>
