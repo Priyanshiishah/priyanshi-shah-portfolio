@@ -83,7 +83,7 @@ export const portfolio = {
     {
       title: "Service Discovery System",
       description:
-        "A resilient, multi-zone service discovery platform on AWS EKS, designed for faster detection, repeatable infrastructure, and dependable backend communication.",
+        "Orchestrated a Consul-based service discovery system that reduced detection time by 50% and improved network traffic management. Automated a multi-zone AWS VPC deployment with Terraform, cutting provisioning time by 40%, while Ansible maintained 99.9% configuration accuracy across Unix/Linux distributed environments. Deployed an Nginx reverse proxy that increased load-handling capacity by 20%, strengthened service-to-service communication, and delivered zero-downtime web services through Bash and DevOps networking automation.",
       impact: [
         "50% faster service detection",
         "40% faster provisioning",
