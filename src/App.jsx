@@ -223,7 +223,19 @@ function ProjectsPanel() {
               {project.index}
             </span>
             <div>
-              <h3 className="text-xl font-bold">{project.title}</h3>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <h3 className="text-xl font-bold">{project.title}</h3>
+                {project.href && (
+                  <a
+                    className="inline-flex items-center gap-2 border-b border-coral pb-1 text-[11px] font-bold uppercase tracking-[0.12em] text-coral transition-colors hover:border-ink hover:text-ink"
+                    href={project.href}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Live project <ArrowIcon />
+                  </a>
+                )}
+              </div>
               <p className="mt-4 text-base leading-7 text-black/55">
                 {project.description}
               </p>

@@ -92,6 +92,25 @@ export const portfolio = {
       ],
       stack: ["AWS EKS", "Consul", "Terraform", "Helm", "Ansible"],
     },
+    {
+      index: "03",
+      title: "Vitalis BMI Calculator",
+      description:
+        "A responsive, edge-hosted health screening application that normalizes metric and imperial measurements, computes BMI and healthy-weight intervals, and maps results to standardized health-risk guidance entirely in the browser.",
+      impact: [
+        "6 BMI risk classifications",
+        "2 measurement systems",
+        "0 server round trips",
+      ],
+      stack: [
+        "JavaScript",
+        "Node.js",
+        "Express",
+        "Responsive CSS",
+        "Cloudflare Pages",
+      ],
+      href: "https://vitalis-bmi-calculator.pages.dev",
+    },
   ],
   experience: [
     {
