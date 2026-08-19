@@ -109,7 +109,7 @@ export const portfolio = {
         "Responsive CSS",
         "Cloudflare Pages",
       ],
-      href: "https://vitalis-bmi-calculator.pages.dev",
+      href: "https://bmi.priyanshii.com",
     },
   ],
   experience: [
