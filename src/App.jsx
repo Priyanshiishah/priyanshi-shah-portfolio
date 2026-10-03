@@ -17,6 +17,18 @@ const accentColors = [
   ["blue", "Blue"],
 ];
 const accentStorageKey = "portfolio-accent";
+const modeStorageKey = "portfolio-mode";
+
+function readModePreference() {
+  const fallback = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  try {
+    const saved = localStorage.getItem(modeStorageKey);
+    return { mode: saved === "dark" || saved === "light" ? saved : fallback, error: "" };
+  } catch (error) {
+    console.warn("Unable to read portfolio mode preference:", error);
+    return { mode: fallback, error: "Display mode preferences cannot be saved in this browser." };
+  }
+}
 
 function readAccentPreference() {
   try {
@@ -33,6 +45,8 @@ function readAccentPreference() {
 
 function Icon({ name }) {
   const paths = {
+    sun: <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></>,
+    moon: <><path d="M20 14A9 9 0 0 1 10 4a9 9 0 1 0 10 10Z" /></>,
     home: <><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8" /></>,
     about: <><circle cx="12" cy="8" r="3" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></>,
     projects: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m9 9-3 3 3 3m6-6 3 3-3 3" /></>,
@@ -128,6 +142,25 @@ function ColorPicker({ color, onChange }) {
 
 function App() {
   const [preference, setPreference] = useState(readAccentPreference);
+  const [modePreference, setModePreference] = useState(readModePreference);
+
+  useEffect(() => {
+    document.documentElement.dataset.mode = modePreference.mode;
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    themeColor?.setAttribute("content", modePreference.mode === "dark" ? "#222126" : "#faf7ef");
+  }, [modePreference.mode]);
+
+  const toggleMode = () => {
+    const mode = modePreference.mode === "dark" ? "light" : "dark";
+    let error = "";
+    try {
+      localStorage.setItem(modeStorageKey, mode);
+    } catch (cause) {
+      console.warn("Unable to save portfolio mode preference:", cause);
+      error = "Display mode changed for this visit, but your browser could not save it.";
+    }
+    setModePreference({ mode, error });
+  };
 
   const changeAccent = (color) => {
     let error = "";
@@ -203,9 +236,21 @@ function App() {
               </a>
             ))}
           </nav>
-          <ColorPicker color={preference.color} onChange={changeAccent} />
+          <div className="appearance-controls">
+            <button
+              className="mode-toggle"
+              type="button"
+              onClick={toggleMode}
+              aria-label={`Switch to ${modePreference.mode === "dark" ? "day" : "dark"} mode`}
+              title={`Switch to ${modePreference.mode === "dark" ? "day" : "dark"} mode`}
+            >
+              <Icon name={modePreference.mode === "dark" ? "sun" : "moon"} />
+            </button>
+            <ColorPicker color={preference.color} onChange={changeAccent} />
+          </div>
         </div>
         {preference.error && <p className="preference-error" role="status">{preference.error}</p>}
+        {modePreference.error && <p className="preference-error" role="status">{modePreference.error}</p>}
       </header>
 
       <main className="page-content" id="main" tabIndex={-1}>
