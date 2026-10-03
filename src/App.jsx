@@ -80,7 +80,11 @@ function ColorPicker({ color, onChange }) {
       if (!containerRef.current?.contains(event.target)) setOpen(false);
     };
     document.addEventListener("pointerdown", dismiss);
-    return () => document.removeEventListener("pointerdown", dismiss);
+    document.addEventListener("focusin", dismiss);
+    return () => {
+      document.removeEventListener("pointerdown", dismiss);
+      document.removeEventListener("focusin", dismiss);
+    };
   }, [open]);
 
   const closeAndFocus = () => {
@@ -97,9 +101,6 @@ function ColorPicker({ color, onChange }) {
           event.preventDefault();
           closeAndFocus();
         }
-      }}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
       }}
     >
       <button
