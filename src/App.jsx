@@ -3,8 +3,8 @@ import { portfolio } from "./data/portfolio";
 
 const navigation = [
   ["About", "about"],
-  ["Projects", "projects"],
   ["Experience", "experience"],
+  ["Projects", "projects"],
   ["Skills", "skills"],
   ["Education", "education"],
 ];
@@ -218,8 +218,8 @@ function App() {
               className="portrait"
               src={portfolio.profileImage}
               alt="Priyanshi Shah"
-              width="112"
-              height="112"
+              width="176"
+              height="176"
             />
           </div>
           <p className="intro-lead">
@@ -247,6 +247,31 @@ function App() {
               </a>
             ))}
             <a href={`mailto:${portfolio.email}`}><Icon name="email" />Email me</a>
+          </div>
+        </section>
+
+        <section id="experience" tabIndex={-1} aria-labelledby="experience-title">
+          <div className="section-heading">
+            <h2 id="experience-title">Work so far</h2>
+            <p>A timeline of my engineering experience.</p>
+          </div>
+          <div className="timeline">
+            {portfolio.experience.map((item) => (
+              <article className="timeline-entry" key={`${item.company}-${item.period}`}>
+                <p className="timeline-date">{item.period}</p>
+                <div>
+                  <div className="organization-heading">
+                    <img className="organization-logo" src={item.logo} alt={`${item.company} logo`} width="48" height="48" loading="lazy" />
+                    <div>
+                      <h3>{item.company}</h3>
+                      <p className="role">{item.role}</p>
+                    </div>
+                  </div>
+                  <p>{item.summary}</p>
+                  <p className="technology-list">{item.tags.join(" · ")}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -285,31 +310,6 @@ function App() {
                     />
                   </details>
                 )}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="experience" tabIndex={-1} aria-labelledby="experience-title">
-          <div className="section-heading">
-            <h2 id="experience-title">Work so far</h2>
-            <p>A timeline of my engineering experience.</p>
-          </div>
-          <div className="timeline">
-            {portfolio.experience.map((item) => (
-              <article className="timeline-entry" key={`${item.company}-${item.period}`}>
-                <p className="timeline-date">{item.period}</p>
-                <div>
-                  <div className="organization-heading">
-                    <img className="organization-logo" src={item.logo} alt={`${item.company} logo`} width="48" height="48" loading="lazy" />
-                    <div>
-                      <h3>{item.company}</h3>
-                      <p className="role">{item.role}</p>
-                    </div>
-                  </div>
-                  <p>{item.summary}</p>
-                  <p className="technology-list">{item.tags.join(" · ")}</p>
-                </div>
               </article>
             ))}
           </div>

@@ -257,8 +257,8 @@ h1 {
 }
 
 .portrait {
-  width: 112px;
-  height: 112px;
+  width: 176px;
+  height: 176px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -444,8 +444,8 @@ h3 {
   }
 
   .portrait {
-    width: 72px;
-    height: 72px;
+    width: 112px;
+    height: 112px;
   }
 
   .intro-lead {
