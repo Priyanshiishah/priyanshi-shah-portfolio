@@ -159,7 +159,7 @@ export const portfolio = {
       company: "Nestlé USA",
       logo: assetPath("logos/nestle.png"),
       role: "Software Engineer, Amazon Account",
-      period: "Jun 2025 — Present",
+      period: "Jun 2025 to Present",
       summary:
         "Architected catalog microservices for 470+ SKUs, improving PDP retention by 19%; built pricing and seller-activity detection that cut Buy Box loss by 12%; and delivered telemetry and LLM analytics supporting 10% YoY growth and 27% better e-commerce forecasting.",
       tags: [
@@ -175,7 +175,7 @@ export const portfolio = {
       company: "Magnamus Inc.",
       logo: assetPath("logos/magnamus.png"),
       role: "Software Development Engineer",
-      period: "Jul 2024 — Jun 2025",
+      period: "Jul 2024 to Jun 2025",
       summary:
         "Optimized Lambda-powered AI pipelines to cut latency by 21%; built FastAPI and PostgreSQL services ingesting 20TB+ of marketing data while reducing manual processing by 40%; and maintained a 99.9% reliability SLO.",
       tags: ["FastAPI", "PostgreSQL", "AWS Lambda", "PyTorch", "CloudWatch"],
@@ -184,7 +184,7 @@ export const portfolio = {
       company: "MemorialCare LBMC",
       logo: assetPath("logos/memorialcare.png"),
       role: "Software Developer",
-      period: "Apr 2024 — Jun 2024",
+      period: "Apr 2024 to Jun 2024",
       summary:
         "Re-architected Azure event-driven healthcare workflows, cutting compliance-processing time by 15%; built resilient asynchronous RAG/LLM pipelines and risk alerts that improved incident visibility by 25%.",
       tags: ["Azure Functions", "Python", "RAG", "LLMs", "Event-Driven Systems"],
@@ -193,7 +193,7 @@ export const portfolio = {
       company: "California State University Long Beach",
       logo: assetPath("logos/csulb.svg"),
       role: "Software Engineer",
-      period: "May 2022 — Mar 2024",
+      period: "May 2022 to Mar 2024",
       summary:
         "Connected React, Node.js, SQL, Oracle, and CRM systems to reduce ERP data inconsistencies by 20% and improve student outreach by 30%; built Python real-time data pipelines for emergency-response planning.",
       tags: ["React", "Node.js", "SQL", "Oracle PaaS"],
@@ -204,7 +204,7 @@ export const portfolio = {
       school: "California State University Long Beach",
       logo: assetPath("logos/csulb.svg"),
       degree: "Master of Science in Computer Science",
-      period: "Aug 2021 — May 2023",
+      period: "Aug 2021 to May 2023",
       location: "Long Beach, California",
     },
     {
@@ -212,7 +212,7 @@ export const portfolio = {
       logo: assetPath("logos/gtu.png"),
       logoClassName: "scale-125",
       degree: "Bachelor of Technology in Computer Engineering",
-      period: "Jul 2016 — Aug 2020",
+      period: "Jul 2016 to Aug 2020",
       location: "Ahmedabad, India",
     },
   ],

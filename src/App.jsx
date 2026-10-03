@@ -33,6 +33,7 @@ function readAccentPreference() {
 
 function Icon({ name }) {
   const paths = {
+    home: <><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8" /></>,
     about: <><circle cx="12" cy="8" r="3" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></>,
     projects: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m9 9-3 3 3 3m6-6 3 3-3 3" /></>,
     experience: <><rect x="3" y="7" width="18" height="14" rx="2" /><path d="M8 7V3h8v4M3 12a22 22 0 0 0 18 0M12 12v3" /></>,
@@ -211,8 +212,7 @@ function App() {
         <section className="introduction" aria-labelledby="about-title">
           <div className="intro-heading">
             <div>
-              <p className="eyebrow">{portfolio.location}</p>
-              <h1 id="about-title">Hi, I'm Priyanshi.</h1>
+              <h1 id="about-title">Hi, I’m Priyanshi!</h1>
             </div>
             <img
               className="portrait"
@@ -222,18 +222,21 @@ function App() {
               height="176"
             />
           </div>
-          <p className="intro-lead">
-            Software engineer working on backend systems, cloud infrastructure,
-            and applied AI.
+          <p>
+            I’m a software engineer who likes turning complex problems into systems
+            that are simple, reliable, and useful. My experience spans backend
+            engineering, distributed systems, cloud infrastructure, and AI. What
+            keeps me interested in this field is that there’s always something new
+            to figure out. I enjoy understanding how things work under the hood,
+            experimenting with new ideas, then putting that learning into practice.
           </p>
           <p>
-            Currently at Nestlé USA, building catalog services and analytics for
-            Amazon e-commerce operations. Previously, I worked on marketing data
-            platforms, healthcare workflows, and university systems.
-          </p>
-          <p>
-            My work spans Python and SQL services, event-driven pipelines, and
-            tools that help teams make sense of their data.
+            Away from my laptop, I like staying active. Working out is a regular
+            part of my routine, while hiking is my favorite excuse to get outdoors.
+            I also love cooking and trying dishes from different cuisines. Some turn
+            out great, some become learning experiences 😄. I’m naturally curious,
+            so I’m almost always picking up a new skill, exploring a new place, or
+            finding something interesting to learn.
           </p>
           <div className="contact-links">
             <a href={portfolio.resumePath} download>
@@ -246,7 +249,10 @@ function App() {
                 {link.label}
               </a>
             ))}
-            <a href={`mailto:${portfolio.email}`}><Icon name="email" />Email me</a>
+            <div className="email-location">
+              <a href={`mailto:${portfolio.email}`}><Icon name="email" />Email me</a>
+              <span className="location"><Icon name="home" />{portfolio.location}</span>
+            </div>
           </div>
         </section>
 
