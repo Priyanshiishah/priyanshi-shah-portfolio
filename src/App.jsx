@@ -76,14 +76,26 @@ function ColorPicker({ color, onChange }) {
   useEffect(() => {
     if (!open) return;
     firstOptionRef.current?.focus();
-    const dismiss = (event) => {
+    let keyboardNavigation = false;
+    const dismissOnPointer = (event) => {
+      keyboardNavigation = false;
       if (!containerRef.current?.contains(event.target)) setOpen(false);
     };
-    document.addEventListener("pointerdown", dismiss);
-    document.addEventListener("focusin", dismiss);
+    const trackKeyboard = (event) => {
+      if (event.key === "Tab") keyboardNavigation = true;
+    };
+    const dismissOnFocus = (event) => {
+      if (keyboardNavigation && !containerRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", dismissOnPointer);
+    document.addEventListener("keydown", trackKeyboard);
+    document.addEventListener("focusin", dismissOnFocus);
     return () => {
-      document.removeEventListener("pointerdown", dismiss);
-      document.removeEventListener("focusin", dismiss);
+      document.removeEventListener("pointerdown", dismissOnPointer);
+      document.removeEventListener("keydown", trackKeyboard);
+      document.removeEventListener("focusin", dismissOnFocus);
     };
   }, [open]);
 
