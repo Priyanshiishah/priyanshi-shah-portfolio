@@ -145,10 +145,15 @@ function App() {
       const section = hash === "resume" ? "experience" : hash;
       if (section === "about") {
         window.scrollTo({ top: 0 });
-        return;
+      } else if (navigation.some(([, id]) => id === section)) {
+        document.getElementById(section)?.scrollIntoView();
       }
       if (navigation.some(([, id]) => id === section)) {
-        document.getElementById(section)?.scrollIntoView();
+        window.history.replaceState(
+          window.history.state,
+          "",
+          window.location.pathname + window.location.search,
+        );
       }
     };
 
@@ -157,21 +162,41 @@ function App() {
     return () => window.removeEventListener("hashchange", scrollToSection);
   }, []);
 
+  const navigateToSection = (event, id) => {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    event.preventDefault();
+    target.focus({ preventScroll: true });
+    if (id === "about") {
+      window.scrollTo({ top: 0 });
+    } else {
+      target.scrollIntoView();
+    }
+    if (window.location.hash) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+  };
+
   return (
     <div className="portfolio-site" data-accent={preference.color}>
-      <a className="skip-link" href="#main">
+      <a className="skip-link" href="#main" onClick={(event) => navigateToSection(event, "main")}>
         Skip to content
       </a>
 
-      <header className="site-header" id="about">
+      <header className="site-header" id="about" tabIndex={-1}>
         <div className="header-inner">
-          <a className="site-name" href="#about">
+          <a className="site-name" href="#about" onClick={(event) => navigateToSection(event, "about")}>
             <Icon name="projects" />
             {portfolio.name}
           </a>
           <nav aria-label="Primary navigation">
             {navigation.map(([label, id]) => (
-              <a href={`#${id}`} key={id}>
+              <a href={`#${id}`} key={id} onClick={(event) => navigateToSection(event, id)}>
                 <Icon name={id} />
                 {label}
               </a>
@@ -182,7 +207,7 @@ function App() {
         {preference.error && <p className="preference-error" role="status">{preference.error}</p>}
       </header>
 
-      <main className="page-content" id="main">
+      <main className="page-content" id="main" tabIndex={-1}>
         <section className="introduction" aria-labelledby="about-title">
           <div className="intro-heading">
             <div>
@@ -225,7 +250,7 @@ function App() {
           </div>
         </section>
 
-        <section id="projects" aria-labelledby="projects-title">
+        <section id="projects" tabIndex={-1} aria-labelledby="projects-title">
           <div className="section-heading">
             <h2 id="projects-title">Selected projects</h2>
             <p>Systems and applications I've built.</p>
@@ -265,7 +290,7 @@ function App() {
           </div>
         </section>
 
-        <section id="experience" aria-labelledby="experience-title">
+        <section id="experience" tabIndex={-1} aria-labelledby="experience-title">
           <div className="section-heading">
             <h2 id="experience-title">Work so far</h2>
             <p>A timeline of my engineering experience.</p>
@@ -290,7 +315,7 @@ function App() {
           </div>
         </section>
 
-        <section id="skills" aria-labelledby="skills-title">
+        <section id="skills" tabIndex={-1} aria-labelledby="skills-title">
           <div className="section-heading">
             <h2 id="skills-title">Tools I work with</h2>
           </div>
@@ -304,7 +329,7 @@ function App() {
           </dl>
         </section>
 
-        <section id="education" aria-labelledby="education-title">
+        <section id="education" tabIndex={-1} aria-labelledby="education-title">
           <div className="section-heading">
             <h2 id="education-title">Education</h2>
           </div>
@@ -330,7 +355,7 @@ function App() {
 
       <footer className="site-footer">
         <p>© {new Date().getFullYear()} {portfolio.name}</p>
-        <a href="#about">Back to top ↑</a>
+        <a href="#about" onClick={(event) => navigateToSection(event, "about")}>Back to top ↑</a>
       </footer>
     </div>
   );

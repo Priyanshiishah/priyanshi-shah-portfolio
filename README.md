@@ -40,6 +40,6 @@ Connect this repository to Cloudflare Pages for automatic preview and production
 - Replace `public/Priyanshi_Shah_Resume.pdf` to update the downloadable resume.
 - Replace `public/priyanshi-shah.jpg` to update the profile photo.
 - Adjust the theme tokens and responsive layout styles in `src/index.css`.
-- Edit the introduction and section layout in `src/App.jsx`. All sections are on one page with hash navigation; `#resume` remains an alias for `#experience`.
+- Edit the introduction and section layout in `src/App.jsx`. Section navigation scrolls and moves keyboard focus without adding hashes to the address bar. Existing section hash links still work on arrival and are cleared afterward; `#resume` remains an alias for `#experience`.
 - Company and school logos use the assets referenced in `src/data/portfolio.js`. Icons are inline SVGs; no external icon service is required.
 - The header color picker changes the accent only (brown, purple, rose, teal, or blue). It remembers the choice in browser local storage under `portfolio-accent`; blocked storage displays a notice and still allows changes for the current visit.
