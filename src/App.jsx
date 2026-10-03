@@ -92,7 +92,7 @@ function ExperiencePanel() {
     >
       <CardHeading
         title="Experience"
-        subtitle="Professional roles from 2020 to present"
+        subtitle="Professional roles from 2022 to present"
       />
 
       <div className="px-6 sm:px-9">
