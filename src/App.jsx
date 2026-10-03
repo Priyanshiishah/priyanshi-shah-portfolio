@@ -1,457 +1,338 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { portfolio } from "./data/portfolio";
 
 const navigation = [
-  ["Experience", "experience"],
-  ["Education", "education"],
-  ["Skills", "skills"],
+  ["About", "about"],
   ["Projects", "projects"],
+  ["Experience", "experience"],
+  ["Skills", "skills"],
+  ["Education", "education"],
 ];
 
-const sectionIds = ["about", ...navigation.map(([, id]) => id)];
+const accentColors = [
+  ["brown", "Brown"],
+  ["purple", "Purple"],
+  ["rose", "Rose"],
+  ["teal", "Teal"],
+  ["blue", "Blue"],
+];
+const accentStorageKey = "portfolio-accent";
 
-function ArrowIcon() {
+function readAccentPreference() {
+  try {
+    const saved = localStorage.getItem(accentStorageKey);
+    return {
+      color: accentColors.some(([color]) => color === saved) ? saved : "brown",
+      error: "",
+    };
+  } catch (error) {
+    console.warn("Unable to read portfolio color preference:", error);
+    return { color: "brown", error: "Color preferences cannot be saved in this browser." };
+  }
+}
+
+function Icon({ name }) {
+  const paths = {
+    about: <><circle cx="12" cy="8" r="3" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></>,
+    projects: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="m9 9-3 3 3 3m6-6 3 3-3 3" /></>,
+    experience: <><rect x="3" y="7" width="18" height="14" rx="2" /><path d="M8 7V3h8v4M3 12a22 22 0 0 0 18 0M12 12v3" /></>,
+    skills: <><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18" /></>,
+    education: <><path d="m2 8 10-5 10 5-10 5-10-5m4 2v7c4 3 8 3 12 0v-7m4-2v8" /></>,
+    download: <><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" /></>,
+    email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 6 9 7 9-7" /></>,
+    GitHub: <><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1 .3-2 1-2 3-.4 5-2 5-5 0-2-.5-3-2-4 .5-1 .5-3 0-4-2 0-3 1-4 2a13 13 0 0 0-6 0C8 4 7 3 5 3c-.5 1-.5 3 0 4-1.5 1-2 2-2 4 0 3 2 4.6 5 5 .7 0 1 1 1 2v4" /></>,
+    LinkedIn: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7 10v7m4 0v-7m0 3a3 3 0 0 1 6 0v4" /><circle cx="7" cy="7" r=".5" /></>,
+    palette: <><circle cx="12" cy="12" r="9" /><circle cx="9" cy="8" r="1" /><circle cx="15" cy="8" r="1" /><circle cx="7" cy="13" r="1" /><path d="M20 16h-5a2 2 0 0 0-2 2v3" /></>,
+  };
+
   return (
-    <svg
-      className="h-4 w-4"
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
-    >
-      <path
-        d="M3 10h14m-5-5 5 5-5 5"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-      />
+    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
     </svg>
   );
 }
 
-function MenuIcon({ open }) {
+function ColorPicker({ color, onChange }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+  const triggerRef = useRef(null);
+  const firstOptionRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    firstOptionRef.current?.focus();
+    const dismiss = (event) => {
+      if (!containerRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, [open]);
+
+  const closeAndFocus = () => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
   return (
-    <svg
-      className="h-5 w-5"
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
+    <div
+      className="color-picker"
+      ref={containerRef}
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open) {
+          event.preventDefault();
+          closeAndFocus();
+        }
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
     >
-      <path
-        d={open ? "M4 4l12 12M16 4 4 16" : "M3 6h14M3 14h14"}
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-}
-
-function CardHeading({ title, subtitle, action }) {
-  return (
-    <header className="flex flex-col gap-5 border-b border-black/15 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-9 sm:py-9">
-      <div>
-        <h2 className="font-serif text-3xl font-normal tracking-[-0.025em] text-ink">
-          {title}
-        </h2>
-        {subtitle && (
-          <p className="mt-3 text-[13px] uppercase tracking-[0.14em] text-black/45">
-            {subtitle}
-          </p>
-        )}
-      </div>
-      {action}
-    </header>
-  );
-}
-
-function AboutPanel() {
-  return (
-    <section
-      className="scroll-mt-24 border-l-[6px] border-coral bg-white shadow-[12px_12px_0_rgba(0,0,0,0.16)]"
-      id="about"
-    >
-      <CardHeading
-        title="About me"
-        subtitle="Software engineering · Data platforms · Applied AI"
-      />
-      <div className="space-y-5 px-6 py-8 text-lg leading-8 text-black/65 sm:px-9 sm:py-9">
-        {portfolio.about.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ExperiencePanel() {
-  return (
-    <section
-      className="scroll-mt-24 border-l-[6px] border-coral bg-white shadow-[12px_12px_0_rgba(0,0,0,0.16)]"
-      id="experience"
-    >
-      <CardHeading
-        title="Experience"
-        subtitle="Professional roles from 2022 to present"
-      />
-
-      <div className="px-6 sm:px-9">
-        {portfolio.experience.map((item) => (
-          <article
-            className="grid grid-cols-[56px_1fr] gap-x-4 gap-y-2 border-b border-black/10 py-7 last:border-b-0 sm:grid-cols-[64px_130px_1fr] sm:gap-x-5"
-            key={`${item.company}-${item.period}`}
-          >
-            <div className="row-span-2 grid h-14 w-14 place-items-center border border-black/10 bg-[#fffdf8] p-2 sm:h-16 sm:w-16">
-              <img
-                className="h-full w-full object-contain"
-                src={item.logo}
-                alt={`${item.company} logo`}
-                loading="lazy"
-              />
-            </div>
-            <p className="col-start-2 text-[11px] font-medium uppercase leading-5 tracking-[0.1em] text-black/40 sm:col-start-auto">
-              {item.period}
-            </p>
-            <div className="col-start-2 sm:col-start-auto">
-              <h3 className="text-lg font-bold">{item.role}</h3>
-              <p className="mt-1 text-[15px] font-semibold text-coral">
-                {item.company}
-              </p>
-              <p className="mt-3 text-base leading-7 text-black/55">
-                {item.summary}
-              </p>
-              <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-black/35">
-                {item.tags.join(" · ")}
-              </p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function EducationPanel() {
-  return (
-    <section
-      className="scroll-mt-24 border-l-[6px] border-coral bg-white shadow-[12px_12px_0_rgba(0,0,0,0.16)]"
-      id="education"
-    >
-      <CardHeading
-        title="Education"
-        subtitle="Academic background"
-      />
-      <div className="divide-y divide-black/10 px-6 sm:px-9">
-        {portfolio.education.map((item) => (
-          <article
-            className="grid grid-cols-[56px_1fr] gap-x-4 gap-y-2 py-9 sm:grid-cols-[64px_130px_1fr] sm:gap-x-5"
-            key={item.degree}
-          >
-            <div className="row-span-2 grid h-14 w-14 place-items-center border border-black/10 bg-[#fffdf8] p-2 sm:h-16 sm:w-16">
-              <img
-                className={`h-full w-full object-contain ${item.logoClassName ?? ""}`}
-                src={item.logo}
-                alt={`${item.school} logo`}
-                loading="lazy"
-              />
-            </div>
-            <p className="col-start-2 text-[11px] font-medium uppercase tracking-[0.1em] text-black/40 sm:col-start-auto">
-              {item.period}
-            </p>
-            <div className="col-start-2 sm:col-start-auto">
-              <h3 className="text-xl font-bold leading-7">{item.degree}</h3>
-              <p className="mt-2 text-base leading-7 text-black/50">
-                {item.school}
-                <br />
-                {item.location}
-              </p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function SkillsPanel() {
-  return (
-    <section
-      className="scroll-mt-24 border-l-[6px] border-coral bg-white shadow-[12px_12px_0_rgba(0,0,0,0.16)]"
-      id="skills"
-    >
-      <CardHeading
-        title="Skills"
-        subtitle="Languages, platforms, and tools"
-      />
-      <div className="grid gap-px bg-black/10 sm:grid-cols-2">
-        {portfolio.skills.map((group) => (
-          <article className="bg-white px-6 py-8 sm:px-9" key={group.category}>
-            <h3 className="text-[13px] font-bold uppercase tracking-[0.14em] text-coral">
-              {group.category}
-            </h3>
-            <ul className="mt-5 space-y-2">
-              {group.items.map((item) => (
-                <li className="text-base text-black/55" key={item}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ProjectsPanel() {
-  return (
-    <section
-      className="scroll-mt-24 border-l-[6px] border-coral bg-white shadow-[12px_12px_0_rgba(0,0,0,0.16)]"
-      id="projects"
-    >
-      <CardHeading
-        title="Projects"
-        subtitle="Selected engineering work"
-      />
-      <div className="divide-y divide-black/10 px-6 sm:px-9">
-        {portfolio.projects.map((project) => (
-          <article
-            className="py-9"
-            key={project.title}
-          >
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <h3 className="text-xl font-bold">{project.title}</h3>
-                {project.href && (
-                  <a
-                    className="inline-flex items-center gap-2 border-b border-coral pb-1 text-[11px] font-bold uppercase tracking-[0.12em] text-coral transition-colors hover:border-ink hover:text-ink"
-                    href={project.href}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    Live project <ArrowIcon />
-                  </a>
-                )}
-              </div>
-              {project.image && (
-                <figure className="mt-5 overflow-hidden border border-black/10 bg-white">
-                  <img
-                    className="h-auto w-full"
-                    src={project.image}
-                    alt={project.imageAlt}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
-              )}
-              <p className="mt-4 text-base leading-7 text-black/55">
-                {project.description}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-                {project.impact.map((impact) => (
-                  <span className="text-[15px] font-bold text-coral" key={impact}>
-                    {impact}
-                  </span>
-                ))}
-              </div>
-              <p className="mt-5 text-[11px] uppercase tracking-[0.08em] text-black/35">
-                {project.stack.join(" · ")}
-              </p>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+      <button
+        className="color-trigger"
+        type="button"
+        aria-label={`Choose accent color, currently ${color}`}
+        aria-expanded={open}
+        aria-controls="accent-options"
+        ref={triggerRef}
+        onClick={() => setOpen(!open)}
+      >
+        <Icon name="palette" />
+      </button>
+      {open && (
+        <div className="color-options" id="accent-options" role="group" aria-label="Accent colors">
+          {accentColors.map(([value, label], index) => (
+            <button
+              className="color-option"
+              data-swatch={value}
+              type="button"
+              key={value}
+              aria-label={label}
+              aria-pressed={color === value}
+              ref={index === 0 ? firstOptionRef : undefined}
+              onClick={() => {
+                onChange(value);
+                closeAndFocus();
+              }}
+            >
+              <span className="color-dot" aria-hidden="true" />
+              <span>{label}</span>
+              <span className="color-check" aria-hidden="true">{color === value ? "✓" : ""}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
 function App() {
-  const [activeSection, setActiveSection] = useState(() => {
-    const initialSection = window.location.hash.slice(1);
-    if (initialSection === "resume") return "experience";
-    return sectionIds.includes(initialSection) ? initialSection : "about";
-  });
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [preference, setPreference] = useState(readAccentPreference);
+
+  const changeAccent = (color) => {
+    let error = "";
+    try {
+      localStorage.setItem(accentStorageKey, color);
+    } catch (cause) {
+      console.warn("Unable to save portfolio color preference:", cause);
+      error = "Color changed for this visit, but your browser could not save it.";
+    }
+    setPreference({ color, error });
+  };
 
   useEffect(() => {
-    const updateFromHash = () => {
-      const section = window.location.hash.slice(1);
-      const normalizedSection =
-        section === "resume" ? "experience" : section;
-      if (sectionIds.includes(normalizedSection)) {
-        setActiveSection(normalizedSection);
+    const scrollToSection = () => {
+      const hash = window.location.hash.slice(1);
+      const section = hash === "resume" ? "experience" : hash;
+      if (section === "about") {
+        window.scrollTo({ top: 0 });
+        return;
+      }
+      if (navigation.some(([, id]) => id === section)) {
+        document.getElementById(section)?.scrollIntoView();
       }
     };
 
-    window.addEventListener("hashchange", updateFromHash);
-    return () => window.removeEventListener("hashchange", updateFromHash);
+    scrollToSection();
+    window.addEventListener("hashchange", scrollToSection);
+    return () => window.removeEventListener("hashchange", scrollToSection);
   }, []);
 
-  const selectSection = (section) => {
-    setActiveSection(section);
-    setMenuOpen(false);
-  };
-
-  const panel =
-    activeSection === "experience" ? (
-      <ExperiencePanel />
-    ) : activeSection === "education" ? (
-      <EducationPanel />
-    ) : activeSection === "skills" ? (
-      <SkillsPanel />
-    ) : activeSection === "projects" ? (
-      <ProjectsPanel />
-    ) : (
-      <AboutPanel />
-    );
-
   return (
-    <>
-      <a
-        className="fixed left-4 top-4 z-[100] -translate-y-24 bg-ink px-4 py-2 text-sm text-white focus:translate-y-0"
-        href="#main"
-      >
+    <div className="portfolio-site" data-accent={preference.color}>
+      <a className="skip-link" href="#main">
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-50 border-b border-black/15 bg-white">
-        <div className="mx-auto flex h-[70px] max-w-[1180px] items-center">
-          <a
-            className="flex h-full items-center bg-ink px-5 text-sm font-bold uppercase tracking-[0.18em] text-white sm:px-7"
-            href="#about"
-            aria-label={`${portfolio.name}, about`}
-            onClick={() => selectSection("about")}
-          >
-            Priyanshi Shah
+      <header className="site-header" id="about">
+        <div className="header-inner">
+          <a className="site-name" href="#about">
+            <Icon name="projects" />
+            {portfolio.name}
           </a>
-
-          <nav
-            className="hidden h-full items-center px-6 md:flex"
-            aria-label="Primary navigation"
-          >
-            {navigation.map(([label, id], index) => (
-              <a
-                className={`px-4 text-[13px] font-medium uppercase tracking-[0.14em] transition-colors ${
-                  index > 0 ? "border-l border-black/10" : ""
-                } ${
-                  activeSection === id
-                    ? "text-coral"
-                    : "text-black/50 hover:text-ink"
-                }`}
-                href={`#${id}`}
-                key={id}
-                aria-current={activeSection === id ? "page" : undefined}
-                onClick={() => selectSection(id)}
-              >
+          <nav aria-label="Primary navigation">
+            {navigation.map(([label, id]) => (
+              <a href={`#${id}`} key={id}>
+                <Icon name={id} />
                 {label}
               </a>
             ))}
           </nav>
-
-          <button
-            className="mr-4 ml-auto grid h-10 w-10 place-items-center border border-black/15 md:hidden"
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            aria-label={`${menuOpen ? "Close" : "Open"} navigation`}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <MenuIcon open={menuOpen} />
-          </button>
+          <ColorPicker color={preference.color} onChange={changeAccent} />
         </div>
-
-        {menuOpen && (
-          <nav
-            id="mobile-menu"
-            className="border-t border-black/10 bg-white px-5 py-3 md:hidden"
-            aria-label="Mobile navigation"
-          >
-            {navigation.map(([label, id]) => (
-              <a
-                className={`flex items-center justify-between border-b border-black/10 py-4 text-sm font-bold uppercase tracking-[0.14em] last:border-b-0 ${
-                  activeSection === id ? "text-coral" : ""
-                }`}
-                href={`#${id}`}
-                key={id}
-                aria-current={activeSection === id ? "page" : undefined}
-                onClick={() => selectSection(id)}
-              >
-                <span>{label}</span>
-                <ArrowIcon />
-              </a>
-            ))}
-          </nav>
-        )}
+        {preference.error && <p className="preference-error" role="status">{preference.error}</p>}
       </header>
 
-      <main
-        className={`mx-auto grid max-w-[1180px] gap-10 px-5 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-12 ${
-          activeSection === "about"
-            ? "lg:min-h-[calc(100svh-70px)] lg:content-center"
-            : ""
-        }`}
-        id="main"
-      >
-        <aside className="self-start text-white lg:sticky lg:top-28">
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="relative">
-              <span
-                className="absolute -right-3 -bottom-3 h-full w-full bg-coral"
-                aria-hidden="true"
-              />
-              <img
-                className="relative h-52 w-52 border-4 border-white object-cover shadow-xl"
-                src={portfolio.profileImage}
-                alt="Priyanshi Shah"
-                width="200"
-                height="200"
-              />
+      <main className="page-content" id="main">
+        <section className="introduction" aria-labelledby="about-title">
+          <div className="intro-heading">
+            <div>
+              <p className="eyebrow">{portfolio.location}</p>
+              <h1 id="about-title">Hi, I'm Priyanshi.</h1>
             </div>
-            <h1 className="mt-7 text-2xl font-bold uppercase tracking-[0.12em]">
-              {portfolio.name}
-            </h1>
-            <a
-              className="mt-3 border-b border-white/25 text-[13px] uppercase tracking-[0.08em] text-white/70 transition-colors hover:border-coral hover:text-coral"
-              href={`mailto:${portfolio.email}`}
-            >
-              {portfolio.email}
-            </a>
-            <p className="mt-3 text-xs uppercase tracking-[0.1em] text-white/45">
-              {portfolio.location}
-            </p>
+            <img
+              className="portrait"
+              src={portfolio.profileImage}
+              alt="Priyanshi Shah"
+              width="112"
+              height="112"
+            />
           </div>
-
-          <div className="mt-8 border-t border-white/15 pt-7">
-            <a
-              className="inline-flex items-center gap-5 border border-white/25 bg-transparent px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-coral hover:bg-coral hover:text-ink"
-              href={portfolio.resumePath}
-              download
-            >
-              Download résumé <ArrowIcon />
+          <p className="intro-lead">
+            Software engineer working on backend systems, cloud infrastructure,
+            and applied AI.
+          </p>
+          <p>
+            Currently at Nestlé USA, building catalog services and analytics for
+            Amazon e-commerce operations. Previously, I worked on marketing data
+            platforms, healthcare workflows, and university systems.
+          </p>
+          <p>
+            My work spans Python and SQL services, event-driven pipelines, and
+            tools that help teams make sense of their data.
+          </p>
+          <div className="contact-links">
+            <a href={portfolio.resumePath} download>
+              <Icon name="download" />
+              Download résumé
             </a>
-          </div>
-
-          <div className="mt-9 flex gap-5 border-t border-white/15 pt-7">
             {portfolio.socialLinks.map((link) => (
-              <a
-                className="text-xs font-bold uppercase tracking-[0.1em] text-white/55 hover:text-coral"
-                href={link.href}
-                key={link.label}
-                rel="noreferrer"
-                target="_blank"
-              >
+              <a href={link.href} key={link.label} target="_blank" rel="noreferrer">
+                <Icon name={link.label} />
                 {link.label}
               </a>
             ))}
+            <a href={`mailto:${portfolio.email}`}><Icon name="email" />Email me</a>
           </div>
-          <p className="mt-8 text-[9px] uppercase tracking-[0.16em] text-white/30">
-            © 2026 Priyanshi Shah
-          </p>
-        </aside>
+        </section>
 
-        <div aria-live="polite">{panel}</div>
+        <section id="projects" aria-labelledby="projects-title">
+          <div className="section-heading">
+            <h2 id="projects-title">Selected projects</h2>
+            <p>Systems and applications I've built.</p>
+          </div>
+          <div className="project-list">
+            {portfolio.projects.map((project) => (
+              <article className="project" key={project.title}>
+                <h3>
+                  {project.href ? (
+                    <a href={project.href} target="_blank" rel="noreferrer">
+                      {project.title} <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : (
+                    project.title
+                  )}
+                </h3>
+                <p>{project.description}</p>
+                <ul className="project-results" aria-label="Project outcomes">
+                  {project.impact.map((impact) => (
+                    <li key={impact}>{impact}</li>
+                  ))}
+                </ul>
+                <p className="technology-list">{project.stack.join(" · ")}</p>
+                {project.image && (
+                  <details className="architecture">
+                    <summary>View architecture</summary>
+                    <img
+                      src={project.image}
+                      alt={project.imageAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </details>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="experience" aria-labelledby="experience-title">
+          <div className="section-heading">
+            <h2 id="experience-title">Work so far</h2>
+            <p>A timeline of my engineering experience.</p>
+          </div>
+          <div className="timeline">
+            {portfolio.experience.map((item) => (
+              <article className="timeline-entry" key={`${item.company}-${item.period}`}>
+                <p className="timeline-date">{item.period}</p>
+                <div>
+                  <div className="organization-heading">
+                    <img className="organization-logo" src={item.logo} alt={`${item.company} logo`} width="48" height="48" loading="lazy" />
+                    <div>
+                      <h3>{item.company}</h3>
+                      <p className="role">{item.role}</p>
+                    </div>
+                  </div>
+                  <p>{item.summary}</p>
+                  <p className="technology-list">{item.tags.join(" · ")}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="skills" aria-labelledby="skills-title">
+          <div className="section-heading">
+            <h2 id="skills-title">Tools I work with</h2>
+          </div>
+          <dl className="skills-list">
+            {portfolio.skills.map((group) => (
+              <div key={group.category}>
+                <dt>{group.category}</dt>
+                <dd>{group.items.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section id="education" aria-labelledby="education-title">
+          <div className="section-heading">
+            <h2 id="education-title">Education</h2>
+          </div>
+          <div className="timeline">
+            {portfolio.education.map((item) => (
+              <article className="timeline-entry" key={item.degree}>
+                <p className="timeline-date">{item.period}</p>
+                <div>
+                  <div className="organization-heading">
+                    <img className="organization-logo" src={item.logo} alt={`${item.school} logo`} width="48" height="48" loading="lazy" />
+                    <div>
+                      <h3>{item.degree}</h3>
+                      <p>{item.school}</p>
+                    </div>
+                  </div>
+                  <p className="technology-list">{item.location}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </main>
-    </>
+
+      <footer className="site-footer">
+        <p>© {new Date().getFullYear()} {portfolio.name}</p>
+        <a href="#about">Back to top ↑</a>
+      </footer>
+    </div>
   );
 }
 
