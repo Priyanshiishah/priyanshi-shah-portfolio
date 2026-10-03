@@ -77,16 +77,18 @@ export const portfolio = {
         "Azure Monitor",
         "Distributed Monitoring",
         "Alerting",
+        "Log Analytics",
       ],
     },
     {
       category: "AI & Machine Learning",
       items: [
         "LLM Agents",
+        "Harness Engineering",
         "MCP",
         "LangChain",
         "PyTorch",
-        "Scikit-learn",
+        "RAG",
       ],
     },
   ],
@@ -94,7 +96,7 @@ export const portfolio = {
     {
       title: "Agentic Commerce Intelligence",
       description:
-        "An agentic platform coordinating commerce investigations across more than four products. Stateful planning, persistent memory, and guarded execution automate routine workflows while keeping tool use observable and reliable.",
+        "An agentic platform coordinating multi-step commerce investigations across more than four products. Stateful planning, persistent memory, and dynamic execution automate routine workflows, with RBAC, guardrails, tracing, and agent evaluations across more than five independent scenarios.",
       impact: [
         "75% of workflows automated",
         "90% task success",
@@ -106,7 +108,7 @@ export const portfolio = {
     {
       title: "Feature Prioritization Platform",
       description:
-        "Built Python services processing more than 1.2 million user events to score feature impact, with A/B testing pipelines supporting data-driven decisions across three product teams.",
+        "Built Python services processing more than 1.2 million user events to score feature impact and automate product prioritization, with improved A/B testing pipelines supporting data-driven decisions across three product teams.",
       impact: [
         "22% increase in feature adoption",
         "1.2M+ user events analyzed",
@@ -161,7 +163,7 @@ export const portfolio = {
       role: "Software Engineer, Amazon Account",
       period: "Jun 2025 to Present",
       summary:
-        "Architected catalog microservices for 470+ SKUs, improving PDP retention by 19%; built pricing and seller-activity detection that cut Buy Box loss by 12%; and delivered telemetry and LLM analytics supporting 10% YoY growth and 27% better e-commerce forecasting.",
+        "Architected catalog microservices for 470+ SKUs, improving PDP retention by 19%; built pricing and seller-activity detection that reduced 12% of Buy Box losses; and delivered telemetry and LLM analytics driving 10% YoY growth and 27% better e-commerce forecasting. Crafted omnichannel security dashboards with Zero Trust LLM attribution.",
       tags: [
         "AWS Lambda",
         "SQL",
@@ -177,7 +179,7 @@ export const portfolio = {
       role: "Software Development Engineer",
       period: "Jul 2024 to Jun 2025",
       summary:
-        "Optimized Lambda-powered AI pipelines to cut latency by 21%; built FastAPI and PostgreSQL services ingesting 20TB+ of marketing data while reducing manual processing by 40%; and maintained a 99.9% reliability SLO.",
+        "Optimized distributed AI agent data pipelines on AWS Lambda to cut latency by 21%; established FastAPI and PostgreSQL services ingesting 20TB+ of marketing data while reducing manual processing by 40%; and redesigned fault-tolerant pipelines with CloudWatch monitoring and observability to maintain a 99.9% reliability SLO. Refactored backend APIs with PyTorch pipelines for real-time predictions across 5+ internal products.",
       tags: ["FastAPI", "PostgreSQL", "AWS Lambda", "PyTorch", "CloudWatch"],
     },
     {
@@ -186,7 +188,7 @@ export const portfolio = {
       role: "Software Developer",
       period: "Apr 2024 to Jun 2024",
       summary:
-        "Re-architected Azure event-driven healthcare workflows, cutting compliance-processing time by 15%; built resilient asynchronous RAG/LLM pipelines and risk alerts that improved incident visibility by 25%.",
+        "Constructed event-driven workflows using Azure Functions, cutting global compliance-processing time by 15%; produced resilient asynchronous RAG/LLM pipelines handling millions of patient records; and designed data-centric alerting for operational risk detection, recovery, and 25% better incident visibility.",
       tags: ["Azure Functions", "Python", "RAG", "LLMs", "Event-Driven Systems"],
     },
     {
@@ -195,7 +197,7 @@ export const portfolio = {
       role: "Software Engineer",
       period: "May 2022 to Mar 2024",
       summary:
-        "Connected React, Node.js, SQL, Oracle, and CRM systems to reduce ERP data inconsistencies by 20% and improve student outreach by 30%; built Python real-time data pipelines for emergency-response planning.",
+        "Adapted React, Node.js, and SQL services to automate ERP workflows and reduce data inconsistencies by 20%; linked Oracle PaaS APIs with CRM systems to automate student data synchronization and improve outreach by 30%; and tailored Python real-time operations data pipelines for emergency-response planning and monitoring.",
       tags: ["React", "Node.js", "SQL", "Oracle PaaS"],
     },
   ],
